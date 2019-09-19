@@ -44,7 +44,7 @@ namespace InlämningsUppgift2
                 Console.WriteLine($"ID: {LagerProdukter[i].ProduktID} | {LagerProdukter[i].ProduktNamn} | {LagerProdukter[i].ProduktPris} {LagerProdukter[i].ProduktPrisTyp}");
             }
         }
-        public Produkt RedigeraProdukt(int produktID)
+        public Produkt HämtaProdukt(int produktID)
         {
             var lagerProdukt = KollaOmProduktFinns(produktID);
             return lagerProdukt;

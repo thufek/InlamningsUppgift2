@@ -18,6 +18,7 @@ namespace InlämningsUppgift2
         public string ProduktNamn { get; set; }
         public decimal ProduktPris { get; set; }
         public PrisTyp ProduktPrisTyp { get; set; }
+        public int ProduktAntal { get; set; }
         public bool ProduktRea { get; set; }
         public DateTime ProduktReaStart { get; set; }
         public DateTime ProduktReaSlut { get; set; }
