@@ -22,12 +22,13 @@ namespace InlämningsUppgift2
         public bool ProduktRea { get; set; }
         public DateTime ProduktReaStart { get; set; }
         public DateTime ProduktReaSlut { get; set; }
-        public int ProduktReaPris { get; set; }
-        public Produkt(int _produktID, string _produktNamn, decimal _produktPris, PrisTyp _produktPrisTyp)
+        public decimal ProduktReaPris { get; set; }
+        public Produkt(int _produktID, string _produktNamn, decimal _produktPris, decimal _produktReaPris, PrisTyp _produktPrisTyp)
         {
             ProduktID = _produktID;
             ProduktNamn = _produktNamn;
             ProduktPris = _produktPris;
+            ProduktReaPris = _produktReaPris;
             ProduktPrisTyp = _produktPrisTyp;
         }
     }

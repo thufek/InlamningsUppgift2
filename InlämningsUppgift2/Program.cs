@@ -11,13 +11,14 @@ namespace InlämningsUppgift2
         static void Main(string[] args)
         {
             var lager = new Lager();
-            lager.LagerProdukter.Add(new Produkt(100, "Snus", 55.90m, Produkt.PrisTyp.krSt));
-            lager.LagerProdukter.Add(new Produkt(200, "Öl", 9.90m, Produkt.PrisTyp.krSt));
-            lager.LagerProdukter.Add(new Produkt(300, "Ferrari", 1995000m, Produkt.PrisTyp.krSt));
-            lager.LagerProdukter.Add(new Produkt(400, "Kaststjärna", 149.90m, Produkt.PrisTyp.krSt));
-            lager.LagerProdukter.Add(new Produkt(500, "Kebab", 69.90m, Produkt.PrisTyp.krSt));
+            lager.LagerProdukter.Add(new Produkt(100, "Snus", 55.90m, 0, Produkt.PrisTyp.krSt));
+            lager.LagerProdukter.Add(new Produkt(200, "Öl", 9.90m, 0, Produkt.PrisTyp.krSt));
+            lager.LagerProdukter.Add(new Produkt(300, "Ferrari", 1995000m, 0, Produkt.PrisTyp.krSt));
+            lager.LagerProdukter.Add(new Produkt(400, "Kaststjärna", 149.90m, 0, Produkt.PrisTyp.krSt));
+            lager.LagerProdukter.Add(new Produkt(500, "Kebab", 69.90m, 0, Produkt.PrisTyp.krKg));
             while (true)
             {
+                Console.Clear();
                 Console.WriteLine("KASSA\n1. Ny kund\n2. Adminverktyg\n3. Avsluta");
                 string huvudMenyVal = Console.ReadLine();
                 if (huvudMenyVal == "1")
@@ -26,6 +27,7 @@ namespace InlämningsUppgift2
                     var kundvagn = new Kundvagn();
                     while (true)
                     {
+                        Console.Clear();
                         Console.WriteLine($"KASSA\nKVITTO    {kundvagn.DatumKvitto}");
                         kundvagn.ListaAllaProdukterIKundvagn();
                         kundvagn.RäknaTotalPris();
@@ -34,17 +36,25 @@ namespace InlämningsUppgift2
                         var kommandoKoll = new KommandoCheck(kommando, lager.LagerProdukter); 
                         if (kommando == "PAY")
                         {
+                            if (kundvagn.Produkter.Count < 1)
+                            {
+                                Console.WriteLine("Inga varor inlagda! Skriver ej ut kvitto!");
+                                Thread.Sleep(2000);
+                                continue;
+                            }
                             Console.WriteLine("Skriver ut kvitto...");
                             Thread.Sleep(3000);
+                            break;
                         }           
                         else if (kommandoKoll.RättKommando)
                         {
                             var lagerProdukt = lager.HämtaProdukt(kommandoKoll.ProduktID);
-                            var nyProdukt = new Produkt(lagerProdukt.ProduktID, lagerProdukt.ProduktNamn, 0, lagerProdukt.ProduktPrisTyp);
+                            var nyProdukt = new Produkt(lagerProdukt.ProduktID, lagerProdukt.ProduktNamn, 0, 0, lagerProdukt.ProduktPrisTyp);
                             for (int i = 0; i < kommandoKoll.Antal; i++)
                             {
                                 nyProdukt.ProduktAntal++;
                                 nyProdukt.ProduktPris += lagerProdukt.ProduktPris;
+                                nyProdukt.ProduktReaPris += lagerProdukt.ProduktReaPris;
                             }
                             bool produktFinns = false;
                             for (int i = 0; i < kundvagn.Produkter.Count; i++)
@@ -53,6 +63,7 @@ namespace InlämningsUppgift2
                                 {
                                     kundvagn.Produkter[i].ProduktAntal += nyProdukt.ProduktAntal;
                                     kundvagn.Produkter[i].ProduktPris += nyProdukt.ProduktPris;
+                                    kundvagn.Produkter[i].ProduktReaPris += nyProdukt.ProduktReaPris;
                                     produktFinns = true;
                                 }
                             }
@@ -66,7 +77,6 @@ namespace InlämningsUppgift2
                             Console.WriteLine($"{kommandoKoll.Meddelande}");
                             Thread.Sleep(2000);
                         }
-                        Console.Clear();
                     }
                 }
                 else if (huvudMenyVal == "2")
@@ -75,7 +85,9 @@ namespace InlämningsUppgift2
                 }
                 else if (huvudMenyVal == "3")
                 {
-
+                    Console.WriteLine("Avslutar...");
+                    Thread.Sleep(2000);
+                    break;
                 }
                 else
                 {

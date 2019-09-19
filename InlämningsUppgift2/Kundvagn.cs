@@ -48,13 +48,16 @@ namespace InlämningsUppgift2
         {
             for (int i = 0; i < Produkter.Count; i++)
             {
+                string prisTyp = "";
+                if (Produkter[i].ProduktPrisTyp == Produkt.PrisTyp.krKg) prisTyp = "kilo";
+                if (Produkter[i].ProduktPrisTyp == Produkt.PrisTyp.krSt) prisTyp = "styck";
                 if (Produkter[i].ProduktRea)
                 {
-                    Console.WriteLine($"{Produkter[i].ProduktNamn} {Produkter[i].ProduktAntal} {Produkter[i].ProduktReaPris}");
+                    Console.WriteLine($"{Produkter[i].ProduktNamn} {Produkter[i].ProduktAntal} {prisTyp} {Produkter[i].ProduktReaPris} REA-vara");
                 }
                 else
                 {
-                    Console.WriteLine($"{Produkter[i].ProduktNamn} {Produkter[i].ProduktAntal} {Produkter[i].ProduktPris}");
+                    Console.WriteLine($"{Produkter[i].ProduktNamn} {Produkter[i].ProduktAntal} {prisTyp} {Produkter[i].ProduktPris}");
                 }
             }
         }
