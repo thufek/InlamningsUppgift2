@@ -43,7 +43,7 @@ namespace InlämningsUppgift2
                             var nyprodukt = lager.HämtaProdukt(kommandoKoll.ProduktID);
                             if (kundvagn.Produkter.Contains(nyprodukt))
                             {
-
+                                kundvagn.Produkter.IndexOf(nyprodukt);
                             }
                             else
                             {
