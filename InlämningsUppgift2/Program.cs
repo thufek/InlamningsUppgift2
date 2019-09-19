@@ -29,8 +29,7 @@ namespace InlämningsUppgift2
                         Console.WriteLine($"KASSA\nKVITTO    {kundvagn.DatumKvitto}");
                         kundvagn.ListaAllaProdukterIKundvagn();
                         kundvagn.RäknaTotalPris();
-                        Console.WriteLine($"Total: {kundvagn.TotalPris}");
-                        Console.WriteLine("kommandon:\n<produkt id> <antal>\nPAY");
+                        Console.WriteLine($"Total: {kundvagn.TotalPris}\nkommandon:\n<produkt id> <antal>\nPAY");
                         string kommando = Console.ReadLine();
                         var kommandoKoll = new KommandoCheck(kommando, lager.LagerProdukter); 
                         if (kommando == "PAY")
@@ -40,18 +39,27 @@ namespace InlämningsUppgift2
                         }           
                         else if (kommandoKoll.RättKommando)
                         {
-                            var nyprodukt = lager.HämtaProdukt(kommandoKoll.ProduktID);
-                            if (kundvagn.Produkter.Contains(nyprodukt))
+                            var lagerProdukt = lager.HämtaProdukt(kommandoKoll.ProduktID);
+                            var nyProdukt = new Produkt(lagerProdukt.ProduktID, lagerProdukt.ProduktNamn, 0, lagerProdukt.ProduktPrisTyp);
+                            for (int i = 0; i < kommandoKoll.Antal; i++)
                             {
-                                kundvagn.Produkter.IndexOf(nyprodukt);
+                                nyProdukt.ProduktAntal++;
+                                nyProdukt.ProduktPris += lagerProdukt.ProduktPris;
                             }
-                            else
+                            bool produktFinns = false;
+                            for (int i = 0; i < kundvagn.Produkter.Count; i++)
                             {
-                                nyprodukt.ProduktAntal = kommandoKoll.Antal;
-                                nyprodukt.ProduktPris *= kommandoKoll.Antal;
-                                kundvagn.Produkter.Add(nyprodukt);
+                                if (kundvagn.Produkter[i].ProduktID == nyProdukt.ProduktID)
+                                {
+                                    kundvagn.Produkter[i].ProduktAntal += nyProdukt.ProduktAntal;
+                                    kundvagn.Produkter[i].ProduktPris += nyProdukt.ProduktPris;
+                                    produktFinns = true;
+                                }
                             }
-
+                            if (produktFinns == false)
+                            {
+                                kundvagn.Produkter.Add(nyProdukt);
+                            }
                         }
                         else
                         {
