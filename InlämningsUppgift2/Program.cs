@@ -49,8 +49,9 @@ namespace InlämningsUppgift2
                         else if (kommandoKoll.RättKommando)
                         {
                             var lagerProdukt = lager.HämtaProdukt(kommandoKoll.ProduktID);
-                            var nyProdukt = new Produkt(lagerProdukt.ProduktID, lagerProdukt.ProduktNamn, 0, 0, lagerProdukt.ProduktPrisTyp);
-                            for (int i = 0; i < kommandoKoll.Antal; i++)
+                            //var nyProdukt = new Produkt(lagerProdukt.ProduktID, lagerProdukt.ProduktNamn, 0, 0, lagerProdukt.ProduktPrisTyp);
+                            var nyProdukt = new Produkt(lagerProdukt);
+                            for (int i = 0; i < kommandoKoll.Antal - 1; i++)
                             {
                                 nyProdukt.ProduktAntal++;
                                 nyProdukt.ProduktPris += lagerProdukt.ProduktPris;

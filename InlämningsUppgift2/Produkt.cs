@@ -30,6 +30,19 @@ namespace InlämningsUppgift2
             ProduktPris = _produktPris;
             ProduktReaPris = _produktReaPris;
             ProduktPrisTyp = _produktPrisTyp;
+            ProduktAntal++;
+        }
+        public Produkt(Produkt produktKopia)
+        {
+            ProduktID = produktKopia.ProduktID;
+            ProduktNamn = produktKopia.ProduktNamn;
+            ProduktPris = produktKopia.ProduktPris;
+            ProduktPrisTyp = produktKopia.ProduktPrisTyp;
+            ProduktAntal = produktKopia.ProduktAntal;
+            ProduktRea = produktKopia.ProduktRea;
+            ProduktReaStart = produktKopia.ProduktReaStart;
+            ProduktReaSlut = produktKopia.ProduktReaSlut;
+            ProduktReaPris = produktKopia.ProduktReaPris;
         }
     }
 }
