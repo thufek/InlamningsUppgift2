@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.IO;
 
 namespace InlämningsUppgift2
 {
@@ -11,11 +12,11 @@ namespace InlämningsUppgift2
         static void Main(string[] args)
         {
             var lager = new Lager();
-            lager.LagerProdukter.Add(new Produkt(100, "Snus", 55.90m, 0, Produkt.PrisTyp.krSt));
-            lager.LagerProdukter.Add(new Produkt(200, "Öl", 9.90m, 0, Produkt.PrisTyp.krSt));
-            lager.LagerProdukter.Add(new Produkt(300, "Ferrari", 1995000m, 0, Produkt.PrisTyp.krSt));
-            lager.LagerProdukter.Add(new Produkt(400, "Kaststjärna", 149.90m, 0, Produkt.PrisTyp.krSt));
-            lager.LagerProdukter.Add(new Produkt(500, "Kebab", 69.90m, 0, Produkt.PrisTyp.krKg));
+            lager.LagerProdukter.Add(new Produkt(100, "Snus", 55.90m, 0, Produkt.PrisTyp.st));
+            lager.LagerProdukter.Add(new Produkt(200, "Öl", 9.90m, 0, Produkt.PrisTyp.st));
+            lager.LagerProdukter.Add(new Produkt(300, "Ferrari", 1995000m, 0, Produkt.PrisTyp.st));
+            lager.LagerProdukter.Add(new Produkt(400, "Kaststjärna", 149.90m, 0, Produkt.PrisTyp.st));
+            lager.LagerProdukter.Add(new Produkt(500, "Kebab", 69.90m, 0, Produkt.PrisTyp.kg));
             while (true)
             {
                 Console.Clear();
@@ -33,7 +34,7 @@ namespace InlämningsUppgift2
                         kundvagn.RäknaTotalPris();
                         Console.WriteLine($"Total: {kundvagn.TotalPris}\nkommandon:\n<produkt id> <antal>\nPAY");
                         string kommando = Console.ReadLine();
-                        var kommandoKoll = new KommandoCheck(kommando, lager.LagerProdukter); 
+                        var kommandoKoll = new KommandoCheck(kommando, lager.LagerProdukter);
                         if (kommando == "PAY")
                         {
                             if (kundvagn.Produkter.Count < 1)
@@ -43,9 +44,10 @@ namespace InlämningsUppgift2
                                 continue;
                             }
                             Console.WriteLine("Skriver ut kvitto...");
+                            kundvagn.SkrivUtKvitto();
                             Thread.Sleep(3000);
                             break;
-                        }           
+                        }
                         else if (kommandoKoll.RättKommando)
                         {
                             var lagerProdukt = lager.HämtaProdukt(kommandoKoll.ProduktID);
@@ -82,7 +84,10 @@ namespace InlämningsUppgift2
                 }
                 else if (huvudMenyVal == "2")
                 {
+                    while (true)
+                    {
 
+                    }
                 }
                 else if (huvudMenyVal == "3")
                 {

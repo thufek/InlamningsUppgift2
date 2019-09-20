@@ -33,24 +33,13 @@ namespace InlämningsUppgift2
                 }      
             }
         }
-        public bool FinnsProduktIKvitto(Produkt produkt)
-        {
-            for (int i = 0; i < Produkter.Count; i++)
-            {
-                if (Produkter[i].ProduktID == produkt.ProduktID)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
         public void ListaAllaProdukterIKundvagn()
         {
             for (int i = 0; i < Produkter.Count; i++)
             {
                 string prisTyp = "";
-                if (Produkter[i].ProduktPrisTyp == Produkt.PrisTyp.krKg) prisTyp = "kilo";
-                if (Produkter[i].ProduktPrisTyp == Produkt.PrisTyp.krSt) prisTyp = "styck";
+                if (Produkter[i].ProduktPrisTyp == Produkt.PrisTyp.kg) prisTyp = "kilo";
+                if (Produkter[i].ProduktPrisTyp == Produkt.PrisTyp.st) prisTyp = "styck";
                 if (Produkter[i].ProduktRea)
                 {
                     Console.WriteLine($"{Produkter[i].ProduktNamn} {Produkter[i].ProduktAntal} {prisTyp} {Produkter[i].ProduktReaPris} REA-vara");
@@ -63,7 +52,33 @@ namespace InlämningsUppgift2
         }
         public void SkrivUtKvitto()
         {
- 
+            string dagensDatum = $"{DatumKvitto.Year}{DatumKvitto.Month}{DatumKvitto.Day}";
+            string path = $"..\\..\\RECEIPT_{dagensDatum}.txt";
+            if (!File.Exists(path))
+            {
+                // Create a file to write to.
+                using (StreamWriter sw = File.CreateText(path))
+                {
+                    sw.WriteLine($"***** {DatumKvitto.TimeOfDay} *****");
+                    foreach (var item in Produkter)
+                    {
+                        sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} : {item.ProduktPrisTyp} : {item.ProduktPris}");
+                    }
+                    sw.WriteLine($"Totalt: {TotalPris}");
+                }
+            }
+            else
+            {
+                using (StreamWriter sw = File.AppendText(path))
+                {
+                    sw.WriteLine($"***** {DatumKvitto.TimeOfDay} *****");
+                    foreach (var item in Produkter)
+                    {
+                        sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} : {item.ProduktPrisTyp} : {item.ProduktPris}");
+                    }
+                    sw.WriteLine($"Totalt: {TotalPris}");
+                }
+            }
         }
     }
 }

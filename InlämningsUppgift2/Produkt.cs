@@ -11,8 +11,8 @@ namespace InlämningsUppgift2
         public enum PrisTyp
         {
             None,
-            krKg,
-            krSt
+            kg,
+            st
         }
         public int ProduktID { get; set; }
         public string ProduktNamn { get; set; }
