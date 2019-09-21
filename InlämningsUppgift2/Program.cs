@@ -12,11 +12,34 @@ namespace InlämningsUppgift2
         static void Main(string[] args)
         {
             var lager = new Lager();
-            lager.LagerProdukter.Add(new Produkt(100, "Snus", 55.90m, 0, Produkt.PrisTyp.st));
-            lager.LagerProdukter.Add(new Produkt(200, "Öl", 9.90m, 0, Produkt.PrisTyp.st));
-            lager.LagerProdukter.Add(new Produkt(300, "Ferrari", 1995000m, 0, Produkt.PrisTyp.st));
-            lager.LagerProdukter.Add(new Produkt(400, "Kaststjärna", 149.90m, 0, Produkt.PrisTyp.st));
-            lager.LagerProdukter.Add(new Produkt(500, "Kebab", 69.90m, 0, Produkt.PrisTyp.kg));
+            //lager.LagerProdukter.Add(new Produkt(100, "Snus", 55.90m, Produkt.PrisTyp.st));
+            //lager.LagerProdukter.Add(new Produkt(200, "Öl", 9.90m, Produkt.PrisTyp.st));
+            //lager.LagerProdukter.Add(new Produkt(300, "Ferrari", 1995000m, Produkt.PrisTyp.st));
+            //lager.LagerProdukter.Add(new Produkt(400, "Kaststjärna", 149.90m, Produkt.PrisTyp.st));
+            //lager.LagerProdukter.Add(new Produkt(500, "Kebab", 69.90m, Produkt.PrisTyp.kg));
+            string path = "..\\..\\LagerProdukter.txt";
+            int id;
+            string namn;
+            decimal pris;
+            string enu;
+            using (StreamReader sr = File.OpenText(path))
+            {
+                while (!sr.EndOfStream)
+                {
+                    id = int.Parse(sr.ReadLine());
+                    namn = sr.ReadLine();
+                    pris = Convert.ToDecimal(sr.ReadLine());
+                    enu = sr.ReadLine();
+                    if (enu == "st")
+                    {
+                        lager.LagerProdukter.Add(new Produkt(id, namn, pris, Produkt.PrisTyp.st));
+                    }
+                    else if (enu == "kg")
+                    {
+                        lager.LagerProdukter.Add(new Produkt(id, namn, pris, Produkt.PrisTyp.kg));
+                    }
+                }              
+            }
             while (true)
             {
                 Console.Clear();
@@ -24,7 +47,6 @@ namespace InlämningsUppgift2
                 string huvudMenyVal = Console.ReadLine();
                 if (huvudMenyVal == "1")
                 {
-                    Console.Clear();
                     var kundvagn = new Kundvagn();
                     while (true)
                     {
@@ -51,7 +73,6 @@ namespace InlämningsUppgift2
                         else if (kommandoKoll.RättKommando)
                         {
                             var lagerProdukt = lager.HämtaProdukt(kommandoKoll.ProduktID);
-                            //var nyProdukt = new Produkt(lagerProdukt.ProduktID, lagerProdukt.ProduktNamn, 0, 0, lagerProdukt.ProduktPrisTyp);
                             var nyProdukt = new Produkt(lagerProdukt);
                             for (int i = 0; i < kommandoKoll.Antal - 1; i++)
                             {
@@ -86,7 +107,8 @@ namespace InlämningsUppgift2
                 {
                     while (true)
                     {
-
+                        Console.Clear();
+                        Console.WriteLine("ADMINVERKTYG\n1. Lägg till ny produkt\n2. Redigera produkt\n3. Avsluta");
                     }
                 }
                 else if (huvudMenyVal == "3")

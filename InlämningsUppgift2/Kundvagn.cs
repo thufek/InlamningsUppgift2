@@ -62,9 +62,9 @@ namespace InlämningsUppgift2
                     sw.WriteLine($"***** {DatumKvitto.TimeOfDay} *****");
                     foreach (var item in Produkter)
                     {
-                        sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} : {item.ProduktPrisTyp} : {item.ProduktPris}");
+                        sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} {item.ProduktPrisTyp} : {item.ProduktPris}");
                     }
-                    sw.WriteLine($"Totalt: {TotalPris}");
+                    sw.WriteLine($"Totalt: {TotalPris} kr");
                 }
             }
             else
@@ -74,9 +74,9 @@ namespace InlämningsUppgift2
                     sw.WriteLine($"***** {DatumKvitto.TimeOfDay} *****");
                     foreach (var item in Produkter)
                     {
-                        sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} : {item.ProduktPrisTyp} : {item.ProduktPris}");
+                        sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} {item.ProduktPrisTyp} : {item.ProduktPris}");
                     }
-                    sw.WriteLine($"Totalt: {TotalPris}");
+                    sw.WriteLine($"Totalt: {TotalPris} kr");
                 }
             }
         }

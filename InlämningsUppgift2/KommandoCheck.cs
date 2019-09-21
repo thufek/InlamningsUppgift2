@@ -45,6 +45,11 @@ namespace InlämningsUppgift2
                     Meddelande = "Hittade ej produkt. Testa annat ID!";
                     RättKommando = false;
                 }
+                if (antal <= 0)
+                {
+                    Meddelande = "Antal måste vara 1 eller mer!";
+                    RättKommando = false;
+                }
             }
             else
             {
