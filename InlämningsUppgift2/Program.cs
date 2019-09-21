@@ -40,6 +40,8 @@ namespace InlämningsUppgift2
                     }
                 }              
             }
+            //lager.LagerProdukter.Add(new Produkt(600, "Kycklinginnerfilé", 89.90m, Produkt.PrisTyp.kg));
+            //lager.LagerProdukter.Add(new Produkt(700, "Cigg", 59.90m, Produkt.PrisTyp.st));
             while (true)
             {
                 Console.Clear();
@@ -114,6 +116,27 @@ namespace InlämningsUppgift2
                 else if (huvudMenyVal == "3")
                 {
                     Console.WriteLine("Avslutar...");
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                    using (StreamWriter sw = File.CreateText(path))
+                    {
+                        for (int i = 0; i < lager.LagerProdukter.Count; i++)
+                        {
+                            sw.WriteLine(lager.LagerProdukter[i].ProduktID);
+                            sw.WriteLine(lager.LagerProdukter[i].ProduktNamn);
+                            sw.WriteLine(lager.LagerProdukter[i].ProduktPris);
+                            if (lager.LagerProdukter[i].ProduktPrisTyp == Produkt.PrisTyp.kg)
+                            {
+                                sw.WriteLine("kg");
+                            }
+                            else if (lager.LagerProdukter[i].ProduktPrisTyp == Produkt.PrisTyp.st)
+                            {
+                                sw.WriteLine("st");
+                            }
+                        }
+                    }
                     Thread.Sleep(2000);
                     break;
                 }

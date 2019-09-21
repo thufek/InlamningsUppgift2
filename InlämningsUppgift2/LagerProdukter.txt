@@ -18,3 +18,11 @@ st
 Kebab
 69,90
 kg
+600
+Kycklinginnerfilé
+89,90
+kg
+700
+Cigg
+59,90
+st

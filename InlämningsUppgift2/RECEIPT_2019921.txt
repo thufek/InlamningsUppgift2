@@ -1,0 +1,4 @@
+***** 11:24:58.4930873 *****
+ID: 600 : Kycklinginnerfilé : 2 kg : 179,80
+ID: 700 : Cigg : 1 st : 59,90
+Totalt: 239,70 kr
