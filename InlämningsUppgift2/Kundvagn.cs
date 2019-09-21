@@ -50,34 +50,28 @@ namespace InlämningsUppgift2
                 }
             }
         }
-        public void SkrivUtKvitto()
+        public void LäggTillNyaProdukterIKundvagn(Produkt lagerProdukt, Produkt nyProdukt, int antal)
         {
-            string dagensDatum = $"{DatumKvitto.Year}{DatumKvitto.Month}{DatumKvitto.Day}";
-            string path = $"..\\..\\RECEIPT_{dagensDatum}.txt";
-            if (!File.Exists(path))
+            for (int i = 0; i < antal - 1; i++)
             {
-                // Create a file to write to.
-                using (StreamWriter sw = File.CreateText(path))
+                nyProdukt.ProduktAntal++;
+                nyProdukt.ProduktPris += lagerProdukt.ProduktPris;
+                nyProdukt.ProduktReaPris += lagerProdukt.ProduktReaPris;
+            }
+            bool produktFinns = false;
+            for (int i = 0; i < Produkter.Count; i++)
+            {
+                if (Produkter[i].ProduktID == nyProdukt.ProduktID)
                 {
-                    sw.WriteLine($"***** {DatumKvitto.TimeOfDay} *****");
-                    foreach (var item in Produkter)
-                    {
-                        sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} {item.ProduktPrisTyp} : {item.ProduktPris}");
-                    }
-                    sw.WriteLine($"Totalt: {TotalPris} kr");
+                    Produkter[i].ProduktAntal += nyProdukt.ProduktAntal;
+                    Produkter[i].ProduktPris += nyProdukt.ProduktPris;
+                    Produkter[i].ProduktReaPris += nyProdukt.ProduktReaPris;
+                    produktFinns = true;
                 }
             }
-            else
+            if (produktFinns == false)
             {
-                using (StreamWriter sw = File.AppendText(path))
-                {
-                    sw.WriteLine($"***** {DatumKvitto.TimeOfDay} *****");
-                    foreach (var item in Produkter)
-                    {
-                        sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} {item.ProduktPrisTyp} : {item.ProduktPris}");
-                    }
-                    sw.WriteLine($"Totalt: {TotalPris} kr");
-                }
+                Produkter.Add(nyProdukt);
             }
         }
     }

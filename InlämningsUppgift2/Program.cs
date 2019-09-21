@@ -12,36 +12,7 @@ namespace InlämningsUppgift2
         static void Main(string[] args)
         {
             var lager = new Lager();
-            //lager.LagerProdukter.Add(new Produkt(100, "Snus", 55.90m, Produkt.PrisTyp.st));
-            //lager.LagerProdukter.Add(new Produkt(200, "Öl", 9.90m, Produkt.PrisTyp.st));
-            //lager.LagerProdukter.Add(new Produkt(300, "Ferrari", 1995000m, Produkt.PrisTyp.st));
-            //lager.LagerProdukter.Add(new Produkt(400, "Kaststjärna", 149.90m, Produkt.PrisTyp.st));
-            //lager.LagerProdukter.Add(new Produkt(500, "Kebab", 69.90m, Produkt.PrisTyp.kg));
-            string path = "..\\..\\LagerProdukter.txt";
-            int id;
-            string namn;
-            decimal pris;
-            string enu;
-            using (StreamReader sr = File.OpenText(path))
-            {
-                while (!sr.EndOfStream)
-                {
-                    id = int.Parse(sr.ReadLine());
-                    namn = sr.ReadLine();
-                    pris = Convert.ToDecimal(sr.ReadLine());
-                    enu = sr.ReadLine();
-                    if (enu == "st")
-                    {
-                        lager.LagerProdukter.Add(new Produkt(id, namn, pris, Produkt.PrisTyp.st));
-                    }
-                    else if (enu == "kg")
-                    {
-                        lager.LagerProdukter.Add(new Produkt(id, namn, pris, Produkt.PrisTyp.kg));
-                    }
-                }              
-            }
-            //lager.LagerProdukter.Add(new Produkt(600, "Kycklinginnerfilé", 89.90m, Produkt.PrisTyp.kg));
-            //lager.LagerProdukter.Add(new Produkt(700, "Cigg", 59.90m, Produkt.PrisTyp.st));
+            IOfunktioner.LaddaInLagerProdukter(lager);
             while (true)
             {
                 Console.Clear();
@@ -68,7 +39,7 @@ namespace InlämningsUppgift2
                                 continue;
                             }
                             Console.WriteLine("Skriver ut kvitto...");
-                            kundvagn.SkrivUtKvitto();
+                            IOfunktioner.SkrivUtKvitto(kundvagn);
                             Thread.Sleep(3000);
                             break;
                         }
@@ -76,27 +47,7 @@ namespace InlämningsUppgift2
                         {
                             var lagerProdukt = lager.HämtaProdukt(kommandoKoll.ProduktID);
                             var nyProdukt = new Produkt(lagerProdukt);
-                            for (int i = 0; i < kommandoKoll.Antal - 1; i++)
-                            {
-                                nyProdukt.ProduktAntal++;
-                                nyProdukt.ProduktPris += lagerProdukt.ProduktPris;
-                                nyProdukt.ProduktReaPris += lagerProdukt.ProduktReaPris;
-                            }
-                            bool produktFinns = false;
-                            for (int i = 0; i < kundvagn.Produkter.Count; i++)
-                            {
-                                if (kundvagn.Produkter[i].ProduktID == nyProdukt.ProduktID)
-                                {
-                                    kundvagn.Produkter[i].ProduktAntal += nyProdukt.ProduktAntal;
-                                    kundvagn.Produkter[i].ProduktPris += nyProdukt.ProduktPris;
-                                    kundvagn.Produkter[i].ProduktReaPris += nyProdukt.ProduktReaPris;
-                                    produktFinns = true;
-                                }
-                            }
-                            if (produktFinns == false)
-                            {
-                                kundvagn.Produkter.Add(nyProdukt);
-                            }
+                            kundvagn.LäggTillNyaProdukterIKundvagn(lagerProdukt, nyProdukt, kommandoKoll.Antal);
                         }
                         else
                         {
@@ -116,27 +67,7 @@ namespace InlämningsUppgift2
                 else if (huvudMenyVal == "3")
                 {
                     Console.WriteLine("Avslutar...");
-                    if (File.Exists(path))
-                    {
-                        File.Delete(path);
-                    }
-                    using (StreamWriter sw = File.CreateText(path))
-                    {
-                        for (int i = 0; i < lager.LagerProdukter.Count; i++)
-                        {
-                            sw.WriteLine(lager.LagerProdukter[i].ProduktID);
-                            sw.WriteLine(lager.LagerProdukter[i].ProduktNamn);
-                            sw.WriteLine(lager.LagerProdukter[i].ProduktPris);
-                            if (lager.LagerProdukter[i].ProduktPrisTyp == Produkt.PrisTyp.kg)
-                            {
-                                sw.WriteLine("kg");
-                            }
-                            else if (lager.LagerProdukter[i].ProduktPrisTyp == Produkt.PrisTyp.st)
-                            {
-                                sw.WriteLine("st");
-                            }
-                        }
-                    }
+                    IOfunktioner.SparaLagerProdukter(lager);
                     Thread.Sleep(2000);
                     break;
                 }
