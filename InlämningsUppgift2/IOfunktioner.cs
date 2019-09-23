@@ -68,7 +68,7 @@ namespace InlämningsUppgift2
                 // Create a file to write to.
                 using (StreamWriter sw = File.CreateText(path))
                 {
-                    sw.WriteLine($"***** {kundvagn.DatumKvitto.TimeOfDay} *****");
+                    sw.WriteLine($"*{Kundvagn.KvittoNummer}* {kundvagn.DatumKvitto.TimeOfDay} *****");
                     foreach (var item in kundvagn.Produkter)
                     {
                         sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} {item.ProduktPrisTyp} : {item.ProduktPris}");
@@ -80,7 +80,7 @@ namespace InlämningsUppgift2
             {
                 using (StreamWriter sw = File.AppendText(path))
                 {
-                    sw.WriteLine($"***** {kundvagn.DatumKvitto.TimeOfDay} *****");
+                    sw.WriteLine($"*{Kundvagn.KvittoNummer}* {kundvagn.DatumKvitto.TimeOfDay} *****");
                     foreach (var item in kundvagn.Produkter)
                     {
                         sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} {item.ProduktPrisTyp} : {item.ProduktPris}");

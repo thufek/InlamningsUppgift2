@@ -61,6 +61,17 @@ namespace InlämningsUppgift2
             }
             return produktFinns;
         }
+        public bool KollaOmProduktFinnsILager(int produktID)
+        {
+            for (int i = 0; i < LagerProdukter.Count; i++)
+            {
+                if (LagerProdukter[i].ProduktID == produktID)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private Produkt KollaOmProduktFinns(int produktID)
         {
             for (int i = 0; i < LagerProdukter.Count; i++)
@@ -83,5 +94,74 @@ namespace InlämningsUppgift2
             }
             return null;
         }
+        public Produkt SkapaNyProdukt()
+        {
+            Produkt nyProdukt;
+            int id = 0;
+            string namn = "";
+            decimal pris = 0;
+            string prisTyp = "";
+            bool okPrisTyp = false;
+            do
+            {
+                if (id == 0)
+                {
+                    while (true)
+                    {
+                        Console.Write("Mata in ID: ");
+                        if (int.TryParse(Console.ReadLine(), out id))
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Ogiltig inmatning!");
+                        }
+                    }
+                }
+                if (namn == "")
+                {
+                    Console.Write("Mata in produktnamn: ");
+                    namn = Console.ReadLine();
+                }
+                if (pris == 0)
+                {
+                    while (true)
+                    {
+                        Console.Write("Mata in pris: ");
+                        if (decimal.TryParse(Console.ReadLine(), out pris))
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Ogiltig inmatning!");
+                        }
+                    }
+
+                }
+                if (!okPrisTyp)
+                {
+                    Console.Write("Mata in pristyp (kg eller st)");
+                    prisTyp = Console.ReadLine();
+                    if (prisTyp == "kg" || prisTyp == "st")
+                    {
+                        okPrisTyp = true;
+                    }
+                }
+            } while (id == 0 || namn == "" || pris == 0 || okPrisTyp == false);
+            if (prisTyp == "st")
+            {
+                return nyProdukt = new Produkt(id, namn, pris, Produkt.PrisTyp.st);
+            }
+            else if (prisTyp == "kg")
+            {
+                return nyProdukt = new Produkt(id, namn, pris, Produkt.PrisTyp.kg);
+            }
+
+            return null;
+
+        }
+
     }
 }

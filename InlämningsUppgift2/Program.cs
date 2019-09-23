@@ -39,6 +39,7 @@ namespace InlämningsUppgift2
                                 continue;
                             }
                             Console.WriteLine("Skriver ut kvitto...");
+                            Kundvagn.KvittoNummer++;
                             IOfunktioner.SkrivUtKvitto(kundvagn);
                             Thread.Sleep(3000);
                             break;
@@ -61,7 +62,35 @@ namespace InlämningsUppgift2
                     while (true)
                     {
                         Console.Clear();
-                        Console.WriteLine("ADMINVERKTYG\n1. Lägg till ny produkt\n2. Redigera produkt\n3. Avsluta");
+                        Console.WriteLine("ADMINVERKTYG\n1. Lägg till ny produkt\n2. Redigera produkt\n3. Tillbaka till huvudmeny");
+                        string adminMenyVal = Console.ReadLine();
+                        if (adminMenyVal == "1")
+                        {
+                            var nyLagerProdukt = lager.SkapaNyProdukt();
+                            if (lager.KollaOmProduktFinnsILager(nyLagerProdukt.ProduktID))
+                            {
+                                Console.WriteLine("Produkt med vald ID existerar redan! Lägger ej till ny produkt!");
+                            }
+                            else
+                            {
+                                lager.LäggTillProduktILager(nyLagerProdukt);
+                                Console.WriteLine($"Lägger till {nyLagerProdukt.ProduktNamn} i lager!");
+                            }
+                            Thread.Sleep(3000);
+                        }
+                        else if(adminMenyVal == "2")
+                        {
+                            
+                        }
+                        else if (adminMenyVal =="3")
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Ogiltig inmatning. Välj 1, 2 eller 3!");
+                            Thread.Sleep(2000);
+                        }
                     }
                 }
                 else if (huvudMenyVal == "3")

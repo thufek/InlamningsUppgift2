@@ -9,9 +9,9 @@ namespace InlämningsUppgift2
 {
     class Kundvagn
     {
+        public static int KvittoNummer = 0;
         public List<Produkt> Produkter { get; set; }
         public DateTime DatumKvitto { get; set; }
-        public int TotaltAntalProdukter { get; set; }
         public decimal TotalPris { get; set; }
         public Kundvagn()
         {
