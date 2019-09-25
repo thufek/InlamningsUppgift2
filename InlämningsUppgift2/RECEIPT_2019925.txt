@@ -1,0 +1,13 @@
+*1 21:51:50.9331791
+Snus 2 st 111,80
+Öl 1 st 9,90
+Kebab 1 kg 69,90
+Totalt: #191,60 kr
+*2 21:52:08.0483490
+Kaststjärna 2 st 299,80
+Snus 2 st 111,80
+Kycklinginnerfilé 1 kg 89,90
+Totalt: #501,50 kr
+*3 21:52:25.8947905
+Kycklinginnerfilé 4 kg 359,60
+Totalt: #359,60 kr

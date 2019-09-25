@@ -62,7 +62,7 @@ namespace InlämningsUppgift2
                     while (true)
                     {
                         Console.Clear();
-                        Console.WriteLine("ADMINVERKTYG\n1. Lägg till ny produkt\n2. Redigera produkt\n3. Tillbaka till huvudmeny");
+                        Console.WriteLine("ADMINVERKTYG\n1. Lägg till ny produkt\n2. Redigera produkt\n3. Sök kvitto");
                         string adminMenyVal = Console.ReadLine();
                         if (adminMenyVal == "1")
                         {
@@ -84,7 +84,7 @@ namespace InlämningsUppgift2
                         }
                         else if (adminMenyVal =="3")
                         {
-                            break;
+                            IOfunktioner.SökKvitto();
                         }
                         else
                         {

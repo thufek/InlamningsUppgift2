@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.IO;
 
 namespace InlämningsUppgift2
@@ -65,29 +65,65 @@ namespace InlämningsUppgift2
             string path = $"..\\..\\RECEIPT_{dagensDatum}.txt";
             if (!File.Exists(path))
             {
-                // Create a file to write to.
                 using (StreamWriter sw = File.CreateText(path))
                 {
-                    sw.WriteLine($"*{Kundvagn.KvittoNummer}* {kundvagn.DatumKvitto.TimeOfDay} *****");
+                    sw.WriteLine($"*{Kundvagn.KvittoNummer} {kundvagn.DatumKvitto.TimeOfDay}");
                     foreach (var item in kundvagn.Produkter)
                     {
-                        sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} {item.ProduktPrisTyp} : {item.ProduktPris}");
+                        sw.WriteLine($"{item.ProduktNamn} {item.ProduktAntal} {item.ProduktPrisTyp} {item.ProduktPris}");
                     }
-                    sw.WriteLine($"Totalt: {kundvagn.TotalPris} kr");
+                    sw.WriteLine($"Totalt: #{kundvagn.TotalPris} kr");
                 }
             }
             else
             {
                 using (StreamWriter sw = File.AppendText(path))
                 {
-                    sw.WriteLine($"*{Kundvagn.KvittoNummer}* {kundvagn.DatumKvitto.TimeOfDay} *****");
+                    sw.WriteLine($"*{Kundvagn.KvittoNummer} {kundvagn.DatumKvitto.TimeOfDay}");
                     foreach (var item in kundvagn.Produkter)
                     {
-                        sw.WriteLine($"ID: {item.ProduktID} : {item.ProduktNamn} : {item.ProduktAntal} {item.ProduktPrisTyp} : {item.ProduktPris}");
+                        sw.WriteLine($"{item.ProduktNamn} {item.ProduktAntal} {item.ProduktPrisTyp} {item.ProduktPris}");
                     }
-                    sw.WriteLine($"Totalt: {kundvagn.TotalPris} kr");
+                    sw.WriteLine($"Totalt: #{kundvagn.TotalPris} kr");
                 }
             }
+        }
+        public static void SökKvitto()
+        {
+            
+            string helaKvittot = "";
+            bool hittatKvitto = false;
+            while (!hittatKvitto)
+            {
+                Console.Clear();
+                Console.Write("Skriv in datum på kvittot du söker i detta format (YYYY-MM-DD): ");
+                if (DateTime.TryParse(Console.ReadLine(), out DateTime datum))
+                {
+                    string dagensDatum = $"{datum.Year}{datum.Month}{datum.Day}";
+                    string path = $"..\\..\\RECEIPT_{dagensDatum}.txt";
+                    if (File.Exists(path))
+                    {
+                        Console.WriteLine("Hittade kvitto!");
+                        hittatKvitto = true;
+                        using (StreamReader sr = File.OpenText(path))
+                        {
+                            helaKvittot = sr.ReadToEnd();
+                        }
+                        Console.ReadLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Hittade ej kvitto för angivet datum!");
+                        Thread.Sleep(3000);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltig inmating. Mata in datum enligt format!");
+                    Thread.Sleep(3000);
+                }
+            }
+            string[] kvitton = helaKvittot.Split('*');
         }
     }
 }
