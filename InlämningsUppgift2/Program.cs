@@ -39,7 +39,7 @@ namespace InlämningsUppgift2
                                 continue;
                             }
                             Console.WriteLine("Skriver ut kvitto...");
-                            Kundvagn.KvittoNummer++;
+                            Kundvagn.KvittoNummer = IOfunktioner.SökKvitto(kundvagn.DatumKvitto);
                             IOfunktioner.SkrivUtKvitto(kundvagn);
                             Thread.Sleep(3000);
                             break;

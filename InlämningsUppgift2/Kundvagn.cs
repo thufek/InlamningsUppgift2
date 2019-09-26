@@ -12,6 +12,8 @@ namespace InlämningsUppgift2
         public static int KvittoNummer = 0;
         public List<Produkt> Produkter { get; set; }
         public DateTime DatumKvitto { get; set; }
+        public decimal ItemsTotal { get; set; }
+        public decimal Rabatt { get; set; }
         public decimal TotalPris { get; set; }
         public Kundvagn()
         {

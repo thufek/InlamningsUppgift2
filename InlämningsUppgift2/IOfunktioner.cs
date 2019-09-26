@@ -67,24 +67,24 @@ namespace InlämningsUppgift2
             {
                 using (StreamWriter sw = File.CreateText(path))
                 {
-                    sw.WriteLine($"*{Kundvagn.KvittoNummer} {kundvagn.DatumKvitto.TimeOfDay}");
+                    sw.WriteLine($"*{Kundvagn.KvittoNummer}¨{kundvagn.DatumKvitto.TimeOfDay}");
                     foreach (var item in kundvagn.Produkter)
                     {
                         sw.WriteLine($"{item.ProduktNamn} {item.ProduktAntal} {item.ProduktPrisTyp} {item.ProduktPris}");
                     }
-                    sw.WriteLine($"Totalt: #{kundvagn.TotalPris} kr");
+                    sw.WriteLine($"Totalt:¨{kundvagn.TotalPris}");
                 }
             }
             else
             {
                 using (StreamWriter sw = File.AppendText(path))
                 {
-                    sw.WriteLine($"*{Kundvagn.KvittoNummer} {kundvagn.DatumKvitto.TimeOfDay}");
+                    sw.WriteLine($"*{Kundvagn.KvittoNummer}¨{kundvagn.DatumKvitto.TimeOfDay}");
                     foreach (var item in kundvagn.Produkter)
                     {
                         sw.WriteLine($"{item.ProduktNamn} {item.ProduktAntal} {item.ProduktPrisTyp} {item.ProduktPris}");
                     }
-                    sw.WriteLine($"Totalt: #{kundvagn.TotalPris} kr");
+                    sw.WriteLine($"Totalt:¨{kundvagn.TotalPris}");
                 }
             }
         }
@@ -124,6 +124,38 @@ namespace InlämningsUppgift2
                 }
             }
             string[] kvitton = helaKvittot.Split('*');
+            for (int i = 1; i < kvitton.Length; i++)
+            {
+                string[] splittadkvitto = kvitton[i].Split('¨');
+                Console.WriteLine($"Kvitto nummer: {splittadkvitto[0]} Totalpris: {splittadkvitto[2]}");
+            }
+            Console.Write("Vilket kvitto vill du se? Mata in kvittonummer!: ");
+            int kvittoNummer = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine(kvitton[kvittoNummer].Replace('¨', ' '));
+            Console.ReadLine();
+        }
+        public static int SökKvitto(DateTime datum)
+        {
+            int kvittoNummer;
+            string helaKvittot = "";
+            bool hittatKvitto = false;
+
+                string dagensDatum = $"{datum.Year}{datum.Month}{datum.Day}";
+                string path = $"..\\..\\RECEIPT_{dagensDatum}.txt";
+                if (File.Exists(path))
+                {
+                    hittatKvitto = true;
+                    using (StreamReader sr = File.OpenText(path))
+                    {
+                        helaKvittot = sr.ReadToEnd();
+                    }
+                }
+                else
+                {
+                    return kvittoNummer = 1;   
+                }
+            string[] kvitton = helaKvittot.Split('*');
+            return kvittoNummer = kvitton.Length;
         }
     }
 }
