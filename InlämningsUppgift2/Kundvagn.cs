@@ -14,6 +14,7 @@ namespace InlämningsUppgift2
         public DateTime DatumKvitto { get; set; }
         public decimal ItemsTotal { get; set; }
         public decimal Rabatt { get; set; }
+        public bool RabatteratPris { get; private set; }
         public decimal TotalPris { get; set; }
         public Kundvagn()
         {
@@ -44,11 +45,11 @@ namespace InlämningsUppgift2
                 if (Produkter[i].ProduktPrisTyp == Produkt.PrisTyp.st) prisTyp = "styck";
                 if (Produkter[i].ProduktRea)
                 {
-                    Console.WriteLine($"{Produkter[i].ProduktNamn} {Produkter[i].ProduktAntal} {prisTyp} {Produkter[i].ProduktReaPris} REA-vara");
+                    Console.WriteLine($"{Produkter[i].ProduktNamn} {Produkter[i].ProduktAntal} {prisTyp} {Produkter[i].ProduktReaPris.ToString("N")} REA-vara");
                 }
                 else
                 {
-                    Console.WriteLine($"{Produkter[i].ProduktNamn} {Produkter[i].ProduktAntal} {prisTyp} {Produkter[i].ProduktPris}");
+                    Console.WriteLine($"{Produkter[i].ProduktNamn} {Produkter[i].ProduktAntal} {prisTyp} {Produkter[i].ProduktPris.ToString("N")}");
                 }
             }
         }
@@ -74,6 +75,27 @@ namespace InlämningsUppgift2
             if (produktFinns == false)
             {
                 Produkter.Add(nyProdukt);
+            }
+        }
+        public void RäknaRabatt()
+        {
+            if (TotalPris > 1000 && TotalPris <= 2000)
+            {
+                ItemsTotal = TotalPris;
+                TotalPris *= 0.98m;
+                Rabatt = TotalPris - ItemsTotal;
+                RabatteratPris = true;
+            }
+            else if (TotalPris > 2000)
+            {
+                ItemsTotal = TotalPris;
+                TotalPris *= 0.97m;
+                Rabatt = TotalPris - ItemsTotal;
+                RabatteratPris = true;
+            }
+            else
+            {
+                RabatteratPris = false;
             }
         }
     }

@@ -24,10 +24,16 @@ namespace InlämningsUppgift2
                     while (true)
                     {
                         Console.Clear();
-                        Console.WriteLine($"KASSA\nKVITTO    {kundvagn.DatumKvitto}");
+                        string datum = kundvagn.DatumKvitto.ToString("yyyy/MM/dd HH:mm:ss");
+                        Console.WriteLine($"KASSA\nKVITTO    {datum}");
                         kundvagn.ListaAllaProdukterIKundvagn();
                         kundvagn.RäknaTotalPris();
-                        Console.WriteLine($"Total: {kundvagn.TotalPris}\nkommandon:\n<produkt id> <antal>\nPAY");
+                        kundvagn.RäknaRabatt();
+                        if (kundvagn.RabatteratPris)
+                        {
+                            Console.WriteLine($"Items total: {kundvagn.ItemsTotal.ToString("N")}\nRabatt: {kundvagn.Rabatt.ToString("N")}");
+                        }
+                        Console.WriteLine($"Total: {kundvagn.TotalPris.ToString("N")}\nkommandon:\n<produkt id> <antal>\nPAY");
                         string kommando = Console.ReadLine();
                         var kommandoKoll = new KommandoCheck(kommando, lager.LagerProdukter);
                         if (kommando == "PAY")
@@ -39,7 +45,7 @@ namespace InlämningsUppgift2
                                 continue;
                             }
                             Console.WriteLine("Skriver ut kvitto...");
-                            Kundvagn.KvittoNummer = IOfunktioner.SökKvitto(kundvagn.DatumKvitto);
+                            Kundvagn.KvittoNummer = IOfunktioner.HämtaKvittoNummer(kundvagn.DatumKvitto);
                             IOfunktioner.SkrivUtKvitto(kundvagn);
                             Thread.Sleep(3000);
                             break;
@@ -62,7 +68,7 @@ namespace InlämningsUppgift2
                     while (true)
                     {
                         Console.Clear();
-                        Console.WriteLine("ADMINVERKTYG\n1. Lägg till ny produkt\n2. Redigera produkt\n3. Sök kvitto");
+                        Console.WriteLine("ADMINVERKTYG\n1. Lägg till ny produkt\n2. Redigera produkt\n3. Sök kvitto\n4. Tillbaka till huvudmeny");
                         string adminMenyVal = Console.ReadLine();
                         if (adminMenyVal == "1")
                         {
@@ -85,6 +91,10 @@ namespace InlämningsUppgift2
                         else if (adminMenyVal =="3")
                         {
                             IOfunktioner.SökKvitto();
+                        }
+                        else if (adminMenyVal == "4")
+                        {
+                            break;
                         }
                         else
                         {

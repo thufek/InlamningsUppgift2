@@ -67,10 +67,15 @@ namespace InlämningsUppgift2
             {
                 using (StreamWriter sw = File.CreateText(path))
                 {
-                    sw.WriteLine($"*{Kundvagn.KvittoNummer}¨{kundvagn.DatumKvitto.TimeOfDay}");
+                    sw.WriteLine($"*{Kundvagn.KvittoNummer}¨{kundvagn.DatumKvitto.Hour}:{kundvagn.DatumKvitto.Minute}:{kundvagn.DatumKvitto.Second}");
                     foreach (var item in kundvagn.Produkter)
                     {
                         sw.WriteLine($"{item.ProduktNamn} {item.ProduktAntal} {item.ProduktPrisTyp} {item.ProduktPris}");
+                    }
+                    if (kundvagn.RabatteratPris)
+                    {
+                        sw.WriteLine($"Items total: {kundvagn.ItemsTotal}");
+                        sw.WriteLine($"Rabatt: {kundvagn.Rabatt}");
                     }
                     sw.WriteLine($"Totalt:¨{kundvagn.TotalPris}");
                 }
@@ -79,18 +84,22 @@ namespace InlämningsUppgift2
             {
                 using (StreamWriter sw = File.AppendText(path))
                 {
-                    sw.WriteLine($"*{Kundvagn.KvittoNummer}¨{kundvagn.DatumKvitto.TimeOfDay}");
+                    sw.WriteLine($"*{Kundvagn.KvittoNummer}¨{kundvagn.DatumKvitto.Hour}:{kundvagn.DatumKvitto.Minute}:{kundvagn.DatumKvitto.Second}");
                     foreach (var item in kundvagn.Produkter)
                     {
                         sw.WriteLine($"{item.ProduktNamn} {item.ProduktAntal} {item.ProduktPrisTyp} {item.ProduktPris}");
+                    }
+                    if (kundvagn.RabatteratPris)
+                    {
+                        sw.WriteLine($"Items total: {kundvagn.ItemsTotal}");
+                        sw.WriteLine($"Rabatt: {kundvagn.Rabatt}");
                     }
                     sw.WriteLine($"Totalt:¨{kundvagn.TotalPris}");
                 }
             }
         }
         public static void SökKvitto()
-        {
-            
+        {         
             string helaKvittot = "";
             bool hittatKvitto = false;
             while (!hittatKvitto)
@@ -109,7 +118,6 @@ namespace InlämningsUppgift2
                         {
                             helaKvittot = sr.ReadToEnd();
                         }
-                        Console.ReadLine();
                     }
                     else
                     {
@@ -134,17 +142,14 @@ namespace InlämningsUppgift2
             Console.WriteLine(kvitton[kvittoNummer].Replace('¨', ' '));
             Console.ReadLine();
         }
-        public static int SökKvitto(DateTime datum)
+        public static int HämtaKvittoNummer(DateTime datum)
         {
             int kvittoNummer;
             string helaKvittot = "";
-            bool hittatKvitto = false;
-
                 string dagensDatum = $"{datum.Year}{datum.Month}{datum.Day}";
                 string path = $"..\\..\\RECEIPT_{dagensDatum}.txt";
                 if (File.Exists(path))
                 {
-                    hittatKvitto = true;
                     using (StreamReader sr = File.OpenText(path))
                     {
                         helaKvittot = sr.ReadToEnd();

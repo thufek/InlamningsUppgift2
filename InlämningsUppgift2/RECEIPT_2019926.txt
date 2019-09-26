@@ -23,3 +23,17 @@ Totalt:¨1995335,30
 *5¨10:31:13.4339136
 Snus 2 st 111,80
 Totalt:¨111,80
+*6¨11:01:48.8571308
+Öl 10 st 99,00
+Totalt:¨99,00
+*7¨14:0:57
+Snus 4 st 223,60
+Öl 10 st 99,00
+Kaststjärna 1 st 149,90
+Kebab 2 kg 139,80
+Totalt:¨612,30
+*8¨14:2:51
+Ferrari 2 st 3990000
+Items total: 3990000
+Rabatt: -119700,00
+Totalt:¨3870300,00
