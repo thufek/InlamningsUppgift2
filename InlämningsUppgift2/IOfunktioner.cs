@@ -2,165 +2,136 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 using System.IO;
 
 namespace InlämningsUppgift2
 {
-    static class IOfunktioner
+    static class IOFunktioner
     {
-        static string lagerPath = "..\\..\\LagerProdukter.txt";
-        public static void LaddaInLagerProdukter(Lager lager)
+        public static string HämtaKvittoText(DateTime datum)
+        {
+            string kvittoInnehåll;
+            string path = $"..\\..\\RECIEPT_{datum.ToString("yyyyMMdd")}.txt";
+            if (File.Exists(path))
+            {
+                using (StreamReader sr = File.OpenText(path))
+                {
+                    kvittoInnehåll = sr.ReadToEnd();
+                }
+                return kvittoInnehåll;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public static int HämtaKvittoNummer(string path)
+        {
+            string kvittoInnehåll;
+            if (!File.Exists(path))
+            {
+                return 1;
+            }
+            else
+            {
+                using (StreamReader sr = File.OpenText(path))
+                {
+                    kvittoInnehåll = sr.ReadToEnd();
+                }
+                string[] antalKvitton = kvittoInnehåll.Split('#');
+                return antalKvitton.Length;
+            }
+        }
+        public static void SkrivUtKvittoTillFil(Kvitto kvitto)
+        {
+            if (!File.Exists(kvitto.Path))
+            {
+                using (StreamWriter sw = File.CreateText(kvitto.Path))
+                {
+
+                }
+            }
+            using (StreamWriter sw = File.AppendText(kvitto.Path))
+            {
+                sw.WriteLine($"#{kvitto.Nummer}¨    {kvitto.Datum.Hour}:{kvitto.Datum.Minute}:{kvitto.Datum.Second}");
+                foreach (var p in kvitto.Produkter)
+                {
+                    sw.WriteLine($"{p.Namn} {p.Antal} {p.HämtaPrisTyp()} * {p.OrginalPris} = {p.TotalPris}");
+                }
+                if (kvitto.Rabatt)
+                {
+                    sw.WriteLine($"Items total: {kvitto.TotalPris}\nRabatt: {kvitto.RabattPris - kvitto.TotalPris}\nTotal:¨{kvitto.RabattPris}");
+                }
+                else
+                {
+                    sw.WriteLine($"Total:¨{kvitto.TotalPris}");
+                }
+            }
+        }
+        public static void HämtaLagerProdukter(List<Produkt> lagerProdukter, string path)
         {
             int id;
             string namn;
-            decimal pris;
-            string enu;
-            using (StreamReader sr = File.OpenText(lagerPath))
+            int maxAntal;
+            string prisTyp;
+            decimal orginalPris;
+            decimal reaPris;
+            bool rea;
+            DateTime reaStart;
+            DateTime reaSlut;
+            using (StreamReader sr = File.OpenText(path))
             {
                 while (!sr.EndOfStream)
                 {
                     id = int.Parse(sr.ReadLine());
                     namn = sr.ReadLine();
-                    pris = Convert.ToDecimal(sr.ReadLine());
-                    enu = sr.ReadLine();
-                    if (enu == "st")
+                    maxAntal = int.Parse(sr.ReadLine());
+                    prisTyp = sr.ReadLine();
+                    orginalPris = Convert.ToDecimal(sr.ReadLine());
+                    reaPris = Convert.ToDecimal(sr.ReadLine());
+                    rea = Convert.ToBoolean(sr.ReadLine());
+                    reaStart = DateTime.Parse(sr.ReadLine());
+                    reaSlut = DateTime.Parse(sr.ReadLine());
+                    if (prisTyp == "st")
                     {
-                        lager.LagerProdukter.Add(new Produkt(id, namn, pris, Produkt.PrisTyp.st));
+                        lagerProdukter.Add(new Produkt(id, namn, maxAntal, Produkt.Typ.St, orginalPris, reaPris, reaStart, reaSlut));
                     }
-                    else if (enu == "kg")
+                    else if (prisTyp == "kg")
                     {
-                        lager.LagerProdukter.Add(new Produkt(id, namn, pris, Produkt.PrisTyp.kg));
+                        lagerProdukter.Add(new Produkt(id, namn, maxAntal, Produkt.Typ.Kg, orginalPris, reaPris, reaStart, reaSlut));
                     }
                 }
             }
         }
-        public static void SparaLagerProdukter(Lager lager)
+        public static void SparaLagerProdukterIFil(List<Produkt> lagerProdukter, string path)
         {
-            if (File.Exists(lagerPath))
+            if (File.Exists(path))
             {
-                File.Delete(lagerPath);
+                File.Delete(path);
             }
-            using (StreamWriter sw = File.CreateText(lagerPath))
+            using (StreamWriter sw = File.CreateText(path))
             {
-                for (int i = 0; i < lager.LagerProdukter.Count; i++)
+                foreach (var p in lagerProdukter)
                 {
-                    sw.WriteLine(lager.LagerProdukter[i].ProduktID);
-                    sw.WriteLine(lager.LagerProdukter[i].ProduktNamn);
-                    sw.WriteLine(lager.LagerProdukter[i].ProduktPris);
-                    if (lager.LagerProdukter[i].ProduktPrisTyp == Produkt.PrisTyp.kg)
-                    {
-                        sw.WriteLine("kg");
-                    }
-                    else if (lager.LagerProdukter[i].ProduktPrisTyp == Produkt.PrisTyp.st)
+                    sw.WriteLine(p.ID);
+                    sw.WriteLine(p.Namn);
+                    sw.WriteLine(p.MaxAntal);
+                    if (p.PrisTyp == Produkt.Typ.St)
                     {
                         sw.WriteLine("st");
                     }
+                    if (p.PrisTyp == Produkt.Typ.Kg)
+                    {
+                        sw.WriteLine("kg");
+                    }
+                    sw.WriteLine(p.OrginalPris);
+                    sw.WriteLine(p.ReaPris);
+                    sw.WriteLine(p.Rea);
+                    sw.WriteLine($"{p.ReaStart.Year}-{p.ReaStart.Month}-{p.ReaStart.Day}");
+                    sw.WriteLine($"{p.ReaSlut.Year}-{p.ReaSlut.Month}-{p.ReaSlut.Day}");
                 }
             }
-        }
-        public static void SkrivUtKvitto(Kundvagn kundvagn)
-        {
-            string dagensDatum = $"{kundvagn.DatumKvitto.Year}{kundvagn.DatumKvitto.Month}{kundvagn.DatumKvitto.Day}";
-            string path = $"..\\..\\RECEIPT_{dagensDatum}.txt";
-            if (!File.Exists(path))
-            {
-                using (StreamWriter sw = File.CreateText(path))
-                {
-                    sw.WriteLine($"*{Kundvagn.KvittoNummer}¨{kundvagn.DatumKvitto.Hour}:{kundvagn.DatumKvitto.Minute}:{kundvagn.DatumKvitto.Second}");
-                    foreach (var item in kundvagn.Produkter)
-                    {
-                        sw.WriteLine($"{item.ProduktNamn} {item.ProduktAntal} {item.ProduktPrisTyp} {item.ProduktPris}");
-                    }
-                    if (kundvagn.RabatteratPris)
-                    {
-                        sw.WriteLine($"Items total: {kundvagn.ItemsTotal}");
-                        sw.WriteLine($"Rabatt: {kundvagn.Rabatt}");
-                    }
-                    sw.WriteLine($"Totalt:¨{kundvagn.TotalPris}");
-                }
-            }
-            else
-            {
-                using (StreamWriter sw = File.AppendText(path))
-                {
-                    sw.WriteLine($"*{Kundvagn.KvittoNummer}¨{kundvagn.DatumKvitto.Hour}:{kundvagn.DatumKvitto.Minute}:{kundvagn.DatumKvitto.Second}");
-                    foreach (var item in kundvagn.Produkter)
-                    {
-                        sw.WriteLine($"{item.ProduktNamn} {item.ProduktAntal} {item.ProduktPrisTyp} {item.ProduktPris}");
-                    }
-                    if (kundvagn.RabatteratPris)
-                    {
-                        sw.WriteLine($"Items total: {kundvagn.ItemsTotal}");
-                        sw.WriteLine($"Rabatt: {kundvagn.Rabatt}");
-                    }
-                    sw.WriteLine($"Totalt:¨{kundvagn.TotalPris}");
-                }
-            }
-        }
-        public static void SökKvitto()
-        {         
-            string helaKvittot = "";
-            bool hittatKvitto = false;
-            while (!hittatKvitto)
-            {
-                Console.Clear();
-                Console.Write("Skriv in datum på kvittot du söker i detta format (YYYY-MM-DD): ");
-                if (DateTime.TryParse(Console.ReadLine(), out DateTime datum))
-                {
-                    string dagensDatum = $"{datum.Year}{datum.Month}{datum.Day}";
-                    string path = $"..\\..\\RECEIPT_{dagensDatum}.txt";
-                    if (File.Exists(path))
-                    {
-                        Console.WriteLine("Hittade kvitto!");
-                        hittatKvitto = true;
-                        using (StreamReader sr = File.OpenText(path))
-                        {
-                            helaKvittot = sr.ReadToEnd();
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Hittade ej kvitto för angivet datum!");
-                        Thread.Sleep(3000);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Ogiltig inmating. Mata in datum enligt format!");
-                    Thread.Sleep(3000);
-                }
-            }
-            string[] kvitton = helaKvittot.Split('*');
-            for (int i = 1; i < kvitton.Length; i++)
-            {
-                string[] splittadkvitto = kvitton[i].Split('¨');
-                Console.WriteLine($"Kvitto nummer: {splittadkvitto[0]} Totalpris: {splittadkvitto[2]}");
-            }
-            Console.Write("Vilket kvitto vill du se? Mata in kvittonummer!: ");
-            int kvittoNummer = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine(kvitton[kvittoNummer].Replace('¨', ' '));
-            Console.ReadLine();
-        }
-        public static int HämtaKvittoNummer(DateTime datum)
-        {
-            int kvittoNummer;
-            string helaKvittot = "";
-                string dagensDatum = $"{datum.Year}{datum.Month}{datum.Day}";
-                string path = $"..\\..\\RECEIPT_{dagensDatum}.txt";
-                if (File.Exists(path))
-                {
-                    using (StreamReader sr = File.OpenText(path))
-                    {
-                        helaKvittot = sr.ReadToEnd();
-                    }
-                }
-                else
-                {
-                    return kvittoNummer = 1;   
-                }
-            string[] kvitton = helaKvittot.Split('*');
-            return kvittoNummer = kvitton.Length;
         }
     }
 }

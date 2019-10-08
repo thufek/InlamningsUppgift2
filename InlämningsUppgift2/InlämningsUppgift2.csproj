@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adminverktyg.cs" />
     <Compile Include="IOFunktioner.cs" />
     <Compile Include="KommandoKoll.cs" />
     <Compile Include="Kvitto.cs" />
