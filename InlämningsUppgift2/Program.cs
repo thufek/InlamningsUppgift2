@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.IO;
 
 namespace InlämningsUppgift2
 {
@@ -12,7 +11,6 @@ namespace InlämningsUppgift2
         static void Main(string[] args)
         {
             var lager = new Lager();
-            IOfunktioner.LaddaInLagerProdukter(lager);
             while (true)
             {
                 Console.Clear();
@@ -20,45 +18,22 @@ namespace InlämningsUppgift2
                 string huvudMenyVal = Console.ReadLine();
                 if (huvudMenyVal == "1")
                 {
-                    var kundvagn = new Kundvagn();
+                    var kvitto = new Kvitto();
                     while (true)
                     {
                         Console.Clear();
-                        string datum = kundvagn.DatumKvitto.ToString("yyyy/MM/dd HH:mm:ss");
-                        Console.WriteLine($"KASSA\nKVITTO    {datum}");
-                        kundvagn.ListaAllaProdukterIKundvagn();
-                        kundvagn.RäknaTotalPris();
-                        kundvagn.RäknaRabatt();
-                        if (kundvagn.RabatteratPris)
-                        {
-                            Console.WriteLine($"Items total: {kundvagn.ItemsTotal.ToString("N")}\nRabatt: {kundvagn.Rabatt.ToString("N")}");
-                        }
-                        Console.WriteLine($"Total: {kundvagn.TotalPris.ToString("N")}\nkommandon:\n<produkt id> <antal>\nPAY");
+                        kvitto.VisaKvitto();
+                        Kvitto.VisaKommandon();
                         string kommando = Console.ReadLine();
-                        var kommandoKoll = new KommandoCheck(kommando, lager.LagerProdukter);
-                        if (kommando == "PAY")
+                        var kommandoKoll = new KommandoKoll(kommando, lager, kvitto);
+                        Console.WriteLine($"{kommandoKoll.Meddelande}");
+                        if (kommandoKoll.Pay)
                         {
-                            if (kundvagn.Produkter.Count < 1)
-                            {
-                                Console.WriteLine("Inga varor inlagda! Skriver ej ut kvitto!");
-                                Thread.Sleep(2000);
-                                continue;
-                            }
-                            Console.WriteLine("Skriver ut kvitto...");
-                            Kundvagn.KvittoNummer = IOfunktioner.HämtaKvittoNummer(kundvagn.DatumKvitto);
-                            IOfunktioner.SkrivUtKvitto(kundvagn);
-                            Thread.Sleep(3000);
+                            Thread.Sleep(2000);
                             break;
                         }
-                        else if (kommandoKoll.RättKommando)
+                        else if (kommandoKoll.Meddelande != null)
                         {
-                            var lagerProdukt = lager.HämtaProdukt(kommandoKoll.ProduktID);
-                            var nyProdukt = new Produkt(lagerProdukt);
-                            kundvagn.LäggTillNyaProdukterIKundvagn(lagerProdukt, nyProdukt, kommandoKoll.Antal);
-                        }
-                        else
-                        {
-                            Console.WriteLine($"{kommandoKoll.Meddelande}");
                             Thread.Sleep(2000);
                         }
                     }
@@ -68,37 +43,32 @@ namespace InlämningsUppgift2
                     while (true)
                     {
                         Console.Clear();
-                        Console.WriteLine("ADMINVERKTYG\n1. Lägg till ny produkt\n2. Redigera produkt\n3. Sök kvitto\n4. Tillbaka till huvudmeny");
+                        Console.WriteLine($"ADMINVERKTYG\n1. Skapa produkt\n2. Redigera produkt\n3. Rea-sätt produkt\n4. Sök kvitto\n5. Tillbaka");
+                        Console.Write("Menyval: ");
                         string adminMenyVal = Console.ReadLine();
                         if (adminMenyVal == "1")
                         {
-                            var nyLagerProdukt = lager.SkapaNyProdukt();
-                            if (lager.KollaOmProduktFinnsILager(nyLagerProdukt.ProduktID))
-                            {
-                                Console.WriteLine("Produkt med vald ID existerar redan! Lägger ej till ny produkt!");
-                            }
-                            else
-                            {
-                                lager.LäggTillProduktILager(nyLagerProdukt);
-                                Console.WriteLine($"Lägger till {nyLagerProdukt.ProduktNamn} i lager!");
-                            }
-                            Thread.Sleep(3000);
+                            Adminverktyg.SkapaNyLagerProdukt(lager);
                         }
-                        else if(adminMenyVal == "2")
+                        else if (adminMenyVal == "2")
                         {
-                            
+                            Adminverktyg.RedigeraLagerProdukt(lager);
                         }
-                        else if (adminMenyVal =="3")
+                        else if (adminMenyVal == "3")
                         {
-                            IOfunktioner.SökKvitto();
+                            Adminverktyg.ReaSättLagerProdukt(lager);
                         }
                         else if (adminMenyVal == "4")
+                        {
+                            Adminverktyg.SökKvitto();
+                        }
+                        else if (adminMenyVal == "5")
                         {
                             break;
                         }
                         else
                         {
-                            Console.WriteLine("Ogiltig inmatning. Välj 1, 2 eller 3!");
+                            Console.WriteLine("Ogiltig input!");
                             Thread.Sleep(2000);
                         }
                     }
@@ -106,15 +76,13 @@ namespace InlämningsUppgift2
                 else if (huvudMenyVal == "3")
                 {
                     Console.WriteLine("Avslutar...");
-                    IOfunktioner.SparaLagerProdukter(lager);
                     Thread.Sleep(2000);
                     break;
                 }
                 else
                 {
-                    Console.WriteLine("Ogiltig inmatning. Mata in 1, 2 eller 3!");
+                    Console.WriteLine("Ogiltig input!");
                     Thread.Sleep(2000);
-                    Console.Clear();
                 }
             }
         }

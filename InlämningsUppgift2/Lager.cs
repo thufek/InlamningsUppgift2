@@ -8,160 +8,56 @@ namespace InlämningsUppgift2
 {
     class Lager
     {
-        public List<Produkt> LagerProdukter { get; set; }
+        public static string path = @"..\..\Produkter.txt";
+        public List<Produkt> Produkter { get; set; }
         public Lager()
         {
-            LagerProdukter = new List<Produkt>();
+            Produkter = new List<Produkt>();
+            HämtaLagerProdukterFrånFil();
         }
-        public void LäggTillProduktILager(Produkt produkt)
+        private void HämtaLagerProdukterFrånFil()
         {
-            bool produktFinns = KollaOmProduktFinns(produkt);
-            if (!produktFinns)
+            IOFunktioner.HämtaLagerProdukter(Produkter, path);
+        }
+        public void SparaLagerProdukterIFil()
+        {
+            IOFunktioner.SparaLagerProdukterIFil(Produkter, path);
+        }
+        public bool ProduktFinnsILager(int id)
+        {
+            return Produkter.Exists(p => p.ID == id);
+        }
+        public bool ProduktFinnsILager(string name)
+        {
+            return Produkter.Exists(p => p.Namn == name);
+        }
+        public Produkt HämtaLagerProdukt(int id)
+        {
+            return Produkter.FirstOrDefault(p => p.ID == id);
+        }
+        public Produkt PlockaUtLagerProdukt(int id)
+        {
+            var produkt = new Produkt(HämtaLagerProdukt(id));
+            TaBortLagerProdukt(id);
+            return produkt;
+        }
+        private void TaBortLagerProdukt(int id)
+        {
+            Produkter.RemoveAll(p => p.ID == id);
+        }
+        public void ListaLagerProdukter()
+        {
+            foreach (var p in Produkter)
             {
-                LagerProdukter.Add(produkt);
+                Console.WriteLine($"{p.ID} {p.Namn}  Pris: {p.OrginalPris} ");
             }
         }
-        public void TaBortProduktFrånLager(int produktID)
+        public void ListaLagerProdukterSomEjÄrRea()
         {
-            var lagerProdukt = KollaOmProduktFinns(produktID);
-            if (lagerProdukt != null)
+            foreach (var p in Produkter.Where(p => p.Rea == false))
             {
-                LagerProdukter.Remove(lagerProdukt);
+                Console.WriteLine($"{p.ID} {p.Namn}  Pris: {p.OrginalPris} ");
             }
         }
-        public void TaBortProduktFrånLager(string produktNamn)
-        {
-            var lagerProdukt = KollaOmProduktFinns(produktNamn);
-            if (lagerProdukt != null)
-            {
-                LagerProdukter.Remove(lagerProdukt);
-            }
-        }
-        public void ListaAllaProdukterILager()
-        {
-            for (int i = 0; i < LagerProdukter.Count; i++)
-            {
-                Console.WriteLine($"ID: {LagerProdukter[i].ProduktID} | {LagerProdukter[i].ProduktNamn} | {LagerProdukter[i].ProduktPris} {LagerProdukter[i].ProduktPrisTyp}");
-            }
-        }
-        public Produkt HämtaProdukt(int produktID)
-        {
-            var lagerProdukt = KollaOmProduktFinns(produktID);
-            return lagerProdukt;
-        }
-        private bool KollaOmProduktFinns(Produkt produkt)
-        {
-            bool produktFinns = false;
-            for (int i = 0; i < LagerProdukter.Count; i++)
-            {
-                if (LagerProdukter[i].ProduktID == produkt.ProduktID || LagerProdukter[i].ProduktNamn == produkt.ProduktNamn)
-                {
-                    produktFinns = true;
-                }
-            }
-            return produktFinns;
-        }
-        public bool KollaOmProduktFinnsILager(int produktID)
-        {
-            for (int i = 0; i < LagerProdukter.Count; i++)
-            {
-                if (LagerProdukter[i].ProduktID == produktID)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        private Produkt KollaOmProduktFinns(int produktID)
-        {
-            for (int i = 0; i < LagerProdukter.Count; i++)
-            {
-                if (LagerProdukter[i].ProduktID == produktID)
-                {
-                    return LagerProdukter[i];
-                }
-            }
-            return null;
-        }
-        private Produkt KollaOmProduktFinns(string produktNamn)
-        {
-            for (int i = 0; i < LagerProdukter.Count; i++)
-            {
-                if (LagerProdukter[i].ProduktNamn == produktNamn)
-                {
-                    return LagerProdukter[i];
-                }
-            }
-            return null;
-        }
-        public Produkt SkapaNyProdukt()
-        {
-            Produkt nyProdukt;
-            int id = 0;
-            string namn = "";
-            decimal pris = 0;
-            string prisTyp = "";
-            bool okPrisTyp = false;
-            do
-            {
-                if (id == 0)
-                {
-                    while (true)
-                    {
-                        Console.Write("Mata in ID: ");
-                        if (int.TryParse(Console.ReadLine(), out id))
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Ogiltig inmatning!");
-                        }
-                    }
-                }
-                if (namn == "")
-                {
-                    Console.Write("Mata in produktnamn: ");
-                    namn = Console.ReadLine();
-                }
-                if (pris == 0)
-                {
-                    while (true)
-                    {
-                        Console.Write("Mata in pris: ");
-                        if (decimal.TryParse(Console.ReadLine(), out pris))
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Ogiltig inmatning!");
-                        }
-                    }
-
-                }
-                if (!okPrisTyp)
-                {
-                    Console.Write("Mata in pristyp (kg eller st)");
-                    prisTyp = Console.ReadLine();
-                    if (prisTyp == "kg" || prisTyp == "st")
-                    {
-                        okPrisTyp = true;
-                    }
-                }
-            } while (id == 0 || namn == "" || pris == 0 || okPrisTyp == false);
-            if (prisTyp == "st")
-            {
-                return nyProdukt = new Produkt(id, namn, pris, Produkt.PrisTyp.st);
-            }
-            else if (prisTyp == "kg")
-            {
-                return nyProdukt = new Produkt(id, namn, pris, Produkt.PrisTyp.kg);
-            }
-
-            return null;
-
-        }
-
     }
 }

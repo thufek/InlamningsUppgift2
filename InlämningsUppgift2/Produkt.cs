@@ -2,46 +2,163 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 
 namespace InlämningsUppgift2
 {
     class Produkt
     {
-        public enum PrisTyp
+        public enum Typ
         {
             None,
-            kg,
-            st
+            Kg,
+            St
         }
-        public int ProduktID { get; set; }
-        public string ProduktNamn { get; set; }
-        public decimal ProduktPris { get; set; }
-        public PrisTyp ProduktPrisTyp { get; set; }
-        public int ProduktAntal { get; set; }
-        public bool ProduktRea { get; set; }
-        public DateTime ProduktReaStart { get; set; }
-        public DateTime ProduktReaSlut { get; set; }
-        public decimal ProduktReaPris { get; set; }
-        public Produkt(int _produktID, string _produktNamn, decimal _produktPris, PrisTyp _produktPrisTyp)
+        public int ID { get; private set; }
+        public string Namn { get; private set; }
+        public int Antal { get; set; }
+        public int MaxAntal { get; private set; }
+        public Typ PrisTyp { get; private set; }
+        public decimal TotalPris { get; private set; }
+        public decimal OrginalPris { get; private set; }
+        public decimal ReaPris { get; private set; }
+        public bool Rea { get; private set; }
+        public DateTime ReaStart { get; private set; }
+        public DateTime ReaSlut { get; private set; }
+        public Produkt(int id, string namn, Typ prisTyp, decimal pris)
         {
-            ProduktID = _produktID;
-            ProduktNamn = _produktNamn;
-            ProduktPris = _produktPris;
-            ProduktPrisTyp = _produktPrisTyp;
-            ProduktAntal++;
+            ID = id;
+            Namn = namn;
+            PrisTyp = prisTyp;
+            OrginalPris = pris;
         }
-        public Produkt(Produkt produktKopia)
+        public Produkt(int id, string namn, int maxAntal, Typ prisTyp, decimal orginalPris, decimal reaPris, DateTime reaStart, DateTime reaSlut)
         {
-            ProduktID = produktKopia.ProduktID;
-            ProduktNamn = produktKopia.ProduktNamn;
-            ProduktPris = produktKopia.ProduktPris;
-            ProduktPrisTyp = produktKopia.ProduktPrisTyp;
-            ProduktAntal = produktKopia.ProduktAntal;
-            ProduktRea = produktKopia.ProduktRea;
-            ProduktReaStart = produktKopia.ProduktReaStart;
-            ProduktReaSlut = produktKopia.ProduktReaSlut;
-            ProduktReaPris = produktKopia.ProduktReaPris;
+            ID = id;
+            Namn = namn;
+            MaxAntal = maxAntal;
+            PrisTyp = prisTyp;
+            OrginalPris = orginalPris;
+            ReaPris = reaPris;
+            ReaStart = reaStart;
+            ReaSlut = reaSlut;
+            KollaOmRea();
+        }
+        public Produkt(Produkt produkt)
+        {
+            ID = produkt.ID;
+            Namn = produkt.Namn;
+            Antal = produkt.Antal;
+            MaxAntal = produkt.MaxAntal;
+            PrisTyp = produkt.PrisTyp;
+            TotalPris = produkt.TotalPris;
+            OrginalPris = produkt.OrginalPris;
+            ReaPris = produkt.ReaPris;
+            Rea = produkt.Rea;
+            ReaStart = produkt.ReaStart;
+            ReaSlut = produkt.ReaSlut;
+            KollaOmRea();
+        }
+        public void RäknaTotalPris()
+        {
+            if (Rea)
+            {
+                TotalPris = ReaPris * Antal;
+            }
+            else
+            {
+                TotalPris = OrginalPris * Antal;
+            }
+        }
+        public bool LäggTillAntal(int antal)
+        {
+            if ((MaxAntal != 0 && (Antal + antal) <= MaxAntal) || (MaxAntal == 0))
+            {
+                Antal += antal;
+                RäknaTotalPris();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void TaBortAntal(int antal)
+        {
+            if (antal >= Antal)
+            {
+                Antal = 0;
+            }
+            else
+            {
+                Antal -= antal;
+            }
+            RäknaTotalPris();
+        }
+        public void SättMaxAntal(int maxAntal)
+        {
+            if (maxAntal > 0)
+            {
+                MaxAntal = maxAntal;
+            }
+        }
+        public void SättReaStart(DateTime reaStart)
+        {
+            ReaStart = reaStart;
+        }
+        public void SättReaSlut(DateTime reaSlut)
+        {
+            ReaSlut = reaSlut;
+            KollaOmRea();
+        }
+        public void KollaOmRea()
+        {
+            if (DateTime.Now.Date >= ReaStart.Date && DateTime.Now.Date <= ReaSlut.Date && ReaPris > 0)
+            {
+                Rea = true;
+            }
+            else
+            {
+                Rea = false;
+            }
+            RäknaTotalPris();
+        }
+        public string HämtaPrisTyp()
+        {
+            string prisTyp;
+            if (PrisTyp == Typ.Kg)
+            {
+                prisTyp = "kg";
+            }
+            else if (PrisTyp == Typ.St)
+            {
+                prisTyp = "st";
+            }
+            else
+            {
+                return null;
+            }
+            return prisTyp;
+        }
+        public bool AntalBlirÖverMax(int antal)
+        {
+            if (MaxAntal != 0 && (antal + Antal) > MaxAntal)
+            {
+                return true;
+            }
+            return false;
+        }
+        public void BytNamnPåProdukt(string nyttNamn)
+        {
+            Namn = nyttNamn;
+        }
+        public void BytPrisPåProdukt(decimal nyttPris)
+        {
+            OrginalPris = nyttPris;
+        }
+        public void SättReaPris(decimal reaPris)
+        {
+            ReaPris = reaPris;
         }
     }
 }

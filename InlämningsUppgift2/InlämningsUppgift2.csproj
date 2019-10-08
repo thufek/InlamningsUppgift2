@@ -43,9 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IOfunktioner.cs" />
-    <Compile Include="KommandoCheck.cs" />
-    <Compile Include="Kundvagn.cs" />
+    <Compile Include="IOFunktioner.cs" />
+    <Compile Include="KommandoKoll.cs" />
+    <Compile Include="Kvitto.cs" />
     <Compile Include="Lager.cs" />
     <Compile Include="Produkt.cs" />
     <Compile Include="Program.cs" />
@@ -53,6 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Produkter.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
