@@ -31,10 +31,6 @@ namespace InlämningsUppgift2
         {
             return Produkter.FirstOrDefault(p => p.ID == id);
         }
-        private void TaBortLagerProdukt(int id)
-        {
-            Produkter.RemoveAll(p => p.ID == id);
-        }
         public void ListaLagerProdukter()
         {
             foreach (var p in Produkter)
