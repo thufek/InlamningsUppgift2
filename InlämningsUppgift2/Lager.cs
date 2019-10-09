@@ -19,10 +19,6 @@ namespace InlämningsUppgift2
         {
             IOFunktioner.HämtaLagerProdukter(Produkter, path);
         }
-        public void SparaLagerProdukterIFil()
-        {
-            IOFunktioner.SparaLagerProdukterIFil(Produkter, path);
-        }
         public bool ProduktFinnsILager(int id)
         {
             return Produkter.Exists(p => p.ID == id);
@@ -34,12 +30,6 @@ namespace InlämningsUppgift2
         public Produkt HämtaLagerProdukt(int id)
         {
             return Produkter.FirstOrDefault(p => p.ID == id);
-        }
-        public Produkt PlockaUtLagerProdukt(int id)
-        {
-            var produkt = new Produkt(HämtaLagerProdukt(id));
-            TaBortLagerProdukt(id);
-            return produkt;
         }
         private void TaBortLagerProdukt(int id)
         {

@@ -70,31 +70,6 @@ namespace InlämningsUppgift2
                 TotalPris = OrginalPris * Antal;
             }
         }
-        public bool LäggTillAntal(int antal)
-        {
-            if ((MaxAntal != 0 && (Antal + antal) <= MaxAntal) || (MaxAntal == 0))
-            {
-                Antal += antal;
-                RäknaTotalPris();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        public void TaBortAntal(int antal)
-        {
-            if (antal >= Antal)
-            {
-                Antal = 0;
-            }
-            else
-            {
-                Antal -= antal;
-            }
-            RäknaTotalPris();
-        }
         public void SättMaxAntal(int maxAntal)
         {
             if (maxAntal > 0)
