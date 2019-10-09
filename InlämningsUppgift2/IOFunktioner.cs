@@ -57,7 +57,14 @@ namespace InlämningsUppgift2
                 sw.WriteLine($"#{kvitto.Nummer}¨    {kvitto.Datum.Hour}:{kvitto.Datum.Minute}:{kvitto.Datum.Second}");
                 foreach (var p in kvitto.Produkter)
                 {
-                    sw.WriteLine($"{p.Namn} {p.Antal} {p.HämtaPrisTyp()} * {p.OrginalPris} = {p.TotalPris}");
+                    if (p.Rea)
+                    {
+                        sw.WriteLine($"{p.Namn} {p.Antal} {p.HämtaPrisTyp()} * {p.ReaPris} = {p.TotalPris}");
+                    }
+                    else
+                    {
+                        sw.WriteLine($"{p.Namn} {p.Antal} {p.HämtaPrisTyp()} * {p.OrginalPris} = {p.TotalPris}");
+                    }
                 }
                 if (kvitto.Rabatt)
                 {
