@@ -24,7 +24,7 @@ namespace InlämningsUppgift2
             Path = $@"..\..\RECIEPT_{Datum.ToString("yyyyMMdd")}.txt";
             Nummer = IOFunktioner.HämtaKvittoNummer(Path);
         }
-        public void RäknaPris()
+        private void RäknaPris()
         {
             TotalPris = Produkter.Sum(p => p.TotalPris);
             RäknaRabatt();
