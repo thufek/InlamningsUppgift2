@@ -86,7 +86,7 @@ namespace InlämningsUppgift2
             ReaSlut = reaSlut;
             KollaOmRea();
         }
-        public void KollaOmRea()
+        private void KollaOmRea()
         {
             if (DateTime.Now.Date >= ReaStart.Date && DateTime.Now.Date <= ReaSlut.Date && ReaPris > 0)
             {
