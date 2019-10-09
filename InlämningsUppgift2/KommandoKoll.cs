@@ -67,6 +67,7 @@ namespace InlämningsUppgift2
                 else
                 {
                     var kvittoProdukt = kvitto.HämtaProduktIKvitto(produktid);
+                    Meddelande = $"Tar bort produkt med id: {produktid}";
                     kvitto.TaBortProdukt(kvittoProdukt);
                 }
             }
