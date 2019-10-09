@@ -46,15 +46,15 @@ namespace InlämningsUppgift2
                         }
                         else
                         {
+                            Meddelande = $"Max {kvittoProdukt.MaxAntal} {kvittoProdukt.HämtaPrisTyp()} per kund! Kunden får ej köpa {kvittoProdukt.Antal + antal} {kvittoProdukt.HämtaPrisTyp()}";
                             kvittoProdukt.Antal = kvittoProdukt.MaxAntal;
-                            Meddelande = $"Max {kvittoProdukt.MaxAntal} {kvittoProdukt.HämtaPrisTyp()} per kund!";
                         }
                     }
                     else
                     {
+                        Meddelande = $"Max {nyProdukt.MaxAntal} {nyProdukt.HämtaPrisTyp()} per kund!  Kunden får ej köpa {nyProdukt.Antal + antal} {nyProdukt.HämtaPrisTyp()}";
                         nyProdukt.Antal = nyProdukt.MaxAntal;
                         kvitto.Produkter.Add(new Produkt(nyProdukt));
-                        Meddelande = $"Max {nyProdukt.MaxAntal} {nyProdukt.HämtaPrisTyp()} per kund!";
                     }
                 }
             }

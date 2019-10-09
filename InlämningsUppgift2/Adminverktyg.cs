@@ -29,13 +29,16 @@ namespace InlämningsUppgift2
                     {
                         string[] kvitton = kvittoInnehåll.Split('#');
                         int kvittoNummer;
+                        var totalPris = new List<decimal>();
                         Console.WriteLine("Hittade kvitton!");
                         for (int i = 1; i < kvitton.Length; i++)
                         {
                             string[] splittadkvitto = kvitton[i].Split('¨');
                             decimal pris = Convert.ToDecimal(splittadkvitto[2]);
+                            totalPris.Add(pris);
                             Console.WriteLine($"Kvitto: {splittadkvitto[0]} ----- Total: {pris,0:C}");
                         }
+                        Console.WriteLine($"Totalt för dagen: {totalPris.Sum(), 0:C}");
                         while (true)
                         {
                             Console.Write("Vilket kvitto vill du se? Mata in kvittonummer!: ");
