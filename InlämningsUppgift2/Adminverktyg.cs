@@ -92,7 +92,7 @@ namespace InlämningsUppgift2
             {
                 lager.Produkter.Add(new Produkt(id, namn, Produkt.Typ.Kg, pris));
             }
-            Meddelande($"Lägger till produk     ID: {id} Namn: {namn} Pris: {pris} {prisTyp}");
+            Meddelande($"Lägger till produkt     ID: {id} Namn: {namn} Pris: {pris} {prisTyp}");
             IOFunktioner.SparaLagerProdukterIFil(lager.Produkter, Lager.path);
         }
         private static int MataInNyId(Lager lager)
