@@ -15,6 +15,7 @@ namespace InlämningsUppgift2
             {
                 Console.Clear();
                 Console.WriteLine("KASSA\n1. Ny kund\n2. Adminverktyg\n3. Avsluta");
+                Console.Write("Menyval: ");
                 string huvudMenyVal = Console.ReadLine();
                 if (huvudMenyVal == "1")
                 {

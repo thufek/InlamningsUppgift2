@@ -15,3 +15,12 @@ Godis 10 kg * 89,90 = 899,00
 Items total: 1118,30
 Rabatt: -22,3660
 Total:¨1095,9340
+#3¨    18:21:49
+Snus 5 st * 47,5150 = 237,5750
+Öl 4 st * 9,90 = 39,60
+DVD 5 st * 99,90 = 499,50
+Gummi Anka 1 st * 39,90 = 39,90
+Oxfile 1 kg * 672,2650 = 672,2650
+Items total: 1488,8400
+Rabatt: -29,776800
+Total:¨1459,063200
